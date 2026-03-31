@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            margin: 60px auto;
+            width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+              width: 90%;
+              height: 120px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .score {
+            font-size: 26px;
+            font-weight: bold;
+        }
+ 
+        .result {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🤖 AI Resume Analyzer</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="resume" required><br>
+        <textarea name="job" rows="6" placeholder="Paste job description..."></textarea><br>
+        <button type="submit">Analyze Resume</button>
+    </form>
+
+    {% if result %}
+<div class="result">
+    <div class="score">
+        Score: {{ result.score }}% <br>
+        <span style="font-size:18px;">{{ result.level }}</span>
+    </div>
+
+    <div style="height:20px; background:#eee; border-radius:10px; margin:15px 0;">
+        <div style="height:100%; background:#4caf50; width: {{ result.score }}%; border-radius:10px;"></div>
+    </div>
+
+    <div style="display:flex; gap:20px; justify-content:space-between;">
+
+    <!-- LEFT SIDE -->
+    <div style="width:50%;">
+
+        <h4>✅ Matched Skills</h4>
+        {% for m in result.matched %}
+            <span style="background:#e0e7ff; padding:6px 12px; margin:5px; border-radius:8px; display:inline-block;">
+                {{ m }}
+            </span>
+        {% endfor %}
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div style="width:50%;">
+        <h4>❌ Missing Skills</h4>
+        {% for m in result.missing %}
+            <span style="background:#ffe0e0; padding:6px 12px; margin:5px; border-radius:8px; display:inline-block;">
+                {{ m }}
+            </span>
+        {% endfor %}
+    </div>
+    
+    <h4>💡 Suggestions</h4>
+       <ul style="text-align:left;">
+        {% for s in result.suggestions %}
+          <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+
+</div>
+
+</div>
+{% endif %}
+</div>
+
+</body>
+</html>
+   
