@@ -1,7 +1,4 @@
 import PyPDF2
-import spacy
-
-nlp = spacy.load("en_core_web_sm")
 
 def extract_text(file_path):
     text = ""
@@ -11,12 +8,13 @@ def extract_text(file_path):
             text += page.extract_text()
     return text
 
-def extract_keywords(text):
-    doc = nlp(text)
-    keywords = []
 
-    for token in doc:
-        if token.is_alpha and not token.is_stop:
-            keywords.append(token.text.lower())
+def extract_keywords(text):
+    words = text.lower().split()
+
+    # remove common words manually
+    stop_words = {"and", "the", "is", "in", "to", "of", "for", "on", "with"}
+
+    keywords = [word for word in words if word.isalpha() and word not in stop_words]
 
     return set(keywords)
